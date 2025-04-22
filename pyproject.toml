@@ -1,0 +1,24 @@
+[project]
+name = "ochw"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "lightning>=2.5.1",
+    "numpy>=2.2.5",
+    "opencv-python>=4.11.0.86",
+    "pillow>=11.2.1",
+    "tensorboard>=2.19.0",
+    "tensorboardx>=2.6.2.2",
+    "torch>=2.6.0",
+    "torch-optimizer>=0.3.0",
+    "torchvision>=0.21.0",
+]
+
+
+
+[[tool.uv.index]]
+name = "aliyun"
+url = "https://mirrors.aliyun.com/pypi/simple"
+default = true
