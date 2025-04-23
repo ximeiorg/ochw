@@ -30,11 +30,11 @@ if __name__ == "__main__":
         mode='min',  # 'min'表示监控指标越小越好  
         save_weights_only=True,  # 只保存权重而不是整个模型  
     ) 
-    # early_stopping = EarlyStopping('val_loss', mode="min")
+    early_stopping = EarlyStopping('val_loss', mode="min")
     trainer_args = {
         'accelerator': 'gpu',
         'devices': [0],
-        'callbacks': [checkpoint_callback],
+        'callbacks': [checkpoint_callback,early_stopping],
         'max_epochs': 100,
     }
     trainer = pl.Trainer(logger=logger, **trainer_args, fast_dev_run=False)
@@ -42,4 +42,3 @@ if __name__ == "__main__":
     model = HandwritingTrainer()
     print(model)
     trainer.fit(model)
-    trainer.test(model)

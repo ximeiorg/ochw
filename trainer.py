@@ -1,27 +1,27 @@
 import pytorch_lightning as pl
 import torch
-
 from dataset import HWDB1Dataset
-from model import HandwritingCNN
+from model import MobileNetV2_Chinese,ResNet18_Chinese
 from torchvision import transforms
-from torch.utils.data import DataLoader, random_split
+from torch.utils.data import DataLoader
 
 
 class HandwritingTrainer(pl.LightningModule):
 
     def __init__(self):
         super().__init__()
-        self.model = HandwritingCNN(4037)
+        self.model = MobileNetV2_Chinese(4037)
         self.criterion = torch.nn.CrossEntropyLoss()
-        self.batch_size = 64
+        self.batch_size = 128
         self.root_dir = "data"
 
     def forward(self, x):
         return self.model(x)
 
     def configure_optimizers(self):
-        optimizer = torch.optim.AdamW(
-            self.model.parameters(), lr=1e-3, weight_decay=1e-4)
+        optimizer = torch.optim.SGD(self.model.parameters(),lr=1e-2,weight_decay=1e-4,momentum=0.9)
+        # optimizer = torch.optim.AdamW(
+        #     self.model.parameters(), lr=1e-3, weight_decay=1e-4)
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
             optimizer, T_max=100)
         return [optimizer], [scheduler]
@@ -65,7 +65,7 @@ class HandwritingTrainer(pl.LightningModule):
         return DataLoader(
             dataset=train_dataset,
             batch_size=self.batch_size,
-            shuffle=True,
+            shuffle=False,
             num_workers=8,
             persistent_workers=True,
             pin_memory=True,
