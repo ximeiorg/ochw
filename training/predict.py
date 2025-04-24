@@ -3,11 +3,12 @@ from trainer import HandwritingTrainer
 from PIL import Image
 from torchvision import transforms
 import os
-import numpy as np 
+import numpy as np
+
 
 def get_labels():
     labels = []
-    with open("data/label.txt", "r", encoding="utf-8") as f:
+    with open("./data/train/label.txt", "r", encoding="utf-8") as f:
         for line in f:
             # line: !	0
             line = line.strip()
@@ -15,27 +16,29 @@ def get_labels():
             labels.append(label)
     return labels
 
+
 if __name__ == "__main__":
-    
-    model = HandwritingTrainer.load_from_checkpoint("logs/version_1/checkpoint-epoch=06-val_loss=0.208.ckpt")
+
+    model = HandwritingTrainer.load_from_checkpoint(
+        "./logs/resnet18/version_7/checkpoint-epoch=28-val_loss=0.140.ckpt", model="resnet18")
     model.eval()
     model = model.to("cuda")
-    img = Image.open("./wo.png")
+    img = Image.open("../testdata/zhi.png")
     img = img.convert("RGB")
-    img = img.resize((64,64))
+    img = img.resize((64, 64))
     trans = transforms.Compose([
-                transforms.Resize((64, 64)),
-                transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406], [
-                                     0.229, 0.224, 0.225])
-            ])
+        transforms.Resize((64, 64)),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [
+            0.229, 0.224, 0.225])
+    ])
     img = trans(img)
     img = img.unsqueeze(0)
     img = img.to("cuda")
     labels = get_labels()
     with torch.no_grad():
         output = model(img)
-        output = torch.nn.functional.softmax(output,dim=1)
+        output = torch.nn.functional.softmax(output, dim=1)
         # 获取top5的预测结果
         top5_prob, top5_idx = torch.topk(output, 5)
         top5_prob = top5_prob.cpu().numpy()
@@ -45,4 +48,3 @@ if __name__ == "__main__":
             print(f"Top {i+1} 预测标签: {labels[idx]}")
             # print(f"Top {i+1} 预测概率: {top5_prob[0][i]:.4f}")
             # print(f"Top {i+1} 预测标签: {top5_idx[0][i]}")
-        
