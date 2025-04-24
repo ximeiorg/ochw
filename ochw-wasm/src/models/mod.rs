@@ -67,7 +67,7 @@ mod test {
         let nclasses = 4037;
         let model = mobilenetv2::Mobilenetv2::new(vb, nclasses).unwrap();
 
-        let image_data = include_bytes!("../../../testdata/qi.png");
+        let image_data = include_bytes!("../../../testdata/tu.png");
         let device = &Device::Cpu;
         let image = load_image_from_buffer(image_data, device).unwrap();
         let image = image.unsqueeze(0).unwrap();
