@@ -9,4 +9,4 @@ ochw 模型基于 mobilenetv2 模型结构，可以实现在 cpu 上也能做到
 
 ### 识别演示
 
-[演示](https://github.com/ximeiorg/ochw/blob/main/testdata/output.mp4)
+[演示](testdata/output.mp4)
