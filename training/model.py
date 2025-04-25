@@ -7,8 +7,6 @@ from torchvision.models.resnet import ResNet18_Weights,ResNet
 class MobileNetV2_Chinese(MobileNetV2):
     def __init__(self, num_classes=3740):
         super().__init__()
-        # 调整第一个卷积层的步长
-        self.features[0][0].stride = (1, 1)
         # 重新定义分类器
         last_channel = 1280
         self.classifier = nn.Sequential(

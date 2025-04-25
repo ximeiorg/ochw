@@ -5,6 +5,8 @@ from model import MobileNetV2_Chinese,ResNet18_Chinese
 from torchvision import transforms
 from torch.utils.data import DataLoader
 
+from util import resize_to_sqr
+
 
 class HandwritingTrainer(pl.LightningModule):
 
@@ -34,7 +36,8 @@ class HandwritingTrainer(pl.LightningModule):
     def common_transforms_compose(self,mode='train'):
         if mode == 'train':
             return transforms.Compose([
-                transforms.Resize((64, 64)),
+                lambda img: resize_to_sqr(img),
+                transforms.Resize(64),
                 transforms.ColorJitter(brightness=0.2, contrast=0.2),  # 颜色扰动
                 transforms.RandomGrayscale(p=0.1),  # 随机灰度化模拟不同墨色
                 transforms.RandomRotation(15),
@@ -44,7 +47,8 @@ class HandwritingTrainer(pl.LightningModule):
             ])
         else:
             return transforms.Compose([
-                transforms.Resize((64, 64)),
+                lambda img: resize_to_sqr(img),
+                transforms.Resize(64),
                 transforms.ToTensor(),
                 transforms.Normalize([0.485, 0.456, 0.406], [
                                      0.229, 0.224, 0.225])

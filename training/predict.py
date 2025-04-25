@@ -20,10 +20,10 @@ def get_labels():
 if __name__ == "__main__":
 
     model = HandwritingTrainer.load_from_checkpoint(
-        "./logs/resnet18/version_7/checkpoint-epoch=28-val_loss=0.140.ckpt", model="resnet18")
+        "./logs/mobilenetv2/version_0/checkpoint-epoch=13-val_loss=0.217.ckpt", model="mobilenetv2")
     model.eval()
     model = model.to("cuda")
-    img = Image.open("../testdata/zhi.png")
+    img = Image.open("/home/kingzcheung/下载/2025-04-26_00-25.jpeg")
     img = img.convert("RGB")
     img = img.resize((64, 64))
     trans = transforms.Compose([
