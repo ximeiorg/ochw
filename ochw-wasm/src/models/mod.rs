@@ -25,6 +25,7 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::Path;
 
+#[allow(dead_code)]
 fn get_labels<P: AsRef<Path>>(path: P) -> std::io::Result<Vec<String>> {
     let file = File::open(path)?;
     let reader = BufReader::new(file);
@@ -67,7 +68,7 @@ mod test {
         let nclasses = 4037;
         let model = mobilenetv2::Mobilenetv2::new(vb, nclasses).unwrap();
 
-        let image_data = include_bytes!("../../../testdata/tu.png");
+        let image_data = include_bytes!("../../../testdata/zhi.png");
         let device = &Device::Cpu;
         let image = load_image_from_buffer(image_data, device).unwrap();
         let image = image.unsqueeze(0).unwrap();

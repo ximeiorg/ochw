@@ -6,9 +6,10 @@ export class HandingWrite {
     private constructor() { }
     public static async getInstance(): Promise<Model> {
         if (!this.instance) {
+            self.postMessage({ status: `loading` });
             await init(wasmUrl)
-            self.postMessage({ status: `loading model` });
             this.instance = Model.new()
+            self.postMessage({ status: `loaded` });
             return this.instance;
         } else {
             return this.instance;

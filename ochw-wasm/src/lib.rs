@@ -43,11 +43,13 @@ impl Model {
         Ok(Self { worker, labels })
     }
 
+    /// 获取标签
     pub fn get_label(&self) -> Result<String, JsError> {
         let json = serde_json::to_string(&self.labels)?;
         Ok(json)
     }
 
+    /// 推理
     pub fn predict(&self, image: Vec<u8>) -> Result<String, JsError> {
         let output = self.worker.predict(image)?;
         let json = serde_json::to_string(&output)?;

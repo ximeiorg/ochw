@@ -46,5 +46,3 @@ if __name__ == "__main__":
         for i in range(5):
             idx = top5_idx[0][i]
             print(f"Top {i+1} 预测标签: {labels[idx]}")
-            # print(f"Top {i+1} 预测概率: {top5_prob[0][i]:.4f}")
-            # print(f"Top {i+1} 预测标签: {top5_idx[0][i]}")
