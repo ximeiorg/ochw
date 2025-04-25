@@ -56,7 +56,6 @@ function App() {
         if (e.data.status == "loaded"){
           setIsLoading(false);
         }
-        
       }
     };
   }, []);
