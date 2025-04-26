@@ -20,10 +20,10 @@ def get_labels():
 if __name__ == "__main__":
 
     model = HandwritingTrainer.load_from_checkpoint(
-        "./logs/mobilenetv2/version_0/checkpoint-epoch=13-val_loss=0.217.ckpt", model="mobilenetv2")
+        "./logs/mobilenetv2/version_0/checkpoint-epoch=14-val_loss=0.221.ckpt", model="mobilenetv2")
     model.eval()
     model = model.to("cuda")
-    img = Image.open("/home/kingzcheung/下载/2025-04-26_00-25.jpeg")
+    img = Image.open("../testdata/qi.png")
     img = img.convert("RGB")
     img = img.resize((64, 64))
     trans = transforms.Compose([
@@ -45,4 +45,4 @@ if __name__ == "__main__":
         top5_idx = top5_idx.cpu().numpy()
         for i in range(5):
             idx = top5_idx[0][i]
-            print(f"Top {i+1} 预测标签: {labels[idx]}")
+            print(f"Top {i+1} 预测标签: {labels[idx]}, 预测概率: {top5_prob[0][i]}")
