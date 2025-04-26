@@ -3,6 +3,9 @@ name = "ochw-wasm"
 version = "0.1.0"
 authors = ["kingzcheung <kingzcheung@gmail.com>"]
 edition = "2018"
+description = "Hand written WebAssembly implementation of Candle"
+repository = "https://github.com/ximeiorg/ochw"
+license = "Apache-2.0"
 
 [lib]
 crate-type = ["cdylib", "rlib"]

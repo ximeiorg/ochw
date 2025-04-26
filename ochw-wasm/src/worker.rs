@@ -21,7 +21,7 @@ impl Worker {
     /// 加载并初始化一个预训练的 MobileNetV2 模型。
     pub fn load_model() -> Result<Self> {
         let dev = &Device::Cpu;
-        let weights = include_bytes!("../ochw_mobilenetv2.safetensors");
+        let weights = include_bytes!("../ochw_mobilenetv2_fp16.safetensors");
         let vb = VarBuilder::from_buffered_safetensors(weights.to_vec(), DType::F32, dev)?;
         let model = crate::models::mobilenetv2::Mobilenetv2::new(vb, 4037)?;
         Ok(Self { model })

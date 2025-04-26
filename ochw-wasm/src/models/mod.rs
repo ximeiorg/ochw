@@ -4,9 +4,11 @@ pub mod mobilenetv2;
 pub mod sequential;
 
 fn load_image64_raw(raw: Vec<u8>, device: &Device) -> Result<Tensor> {
-    let data = Tensor::from_vec(raw, (64, 64, 3), device)?.permute((2, 0, 1))?;
-    let mean = Tensor::new(&[0.485f32, 0.456, 0.406], device)?.reshape((3, 1, 1))?;
-    let std = Tensor::new(&[0.229f32, 0.224, 0.225], device)?.reshape((3, 1, 1))?;
+    let mean_array = [0.95f32, 0.95, 0.95];//[0.485f32, 0.456, 0.406]
+    let std_array = [0.2f32, 0.2, 0.2];//[0.229f32, 0.224, 0.225]
+    let data = Tensor::from_vec(raw, (96, 96, 3), device)?.permute((2, 0, 1))?;
+    let mean = Tensor::new(&mean_array, device)?.reshape((3, 1, 1))?;
+    let std = Tensor::new(&std_array, device)?.reshape((3, 1, 1))?;
     (data.to_dtype(DType::F32)? / 255.0)?
         .broadcast_sub(&mean)?
         .broadcast_div(&std)
@@ -15,7 +17,7 @@ fn load_image64_raw(raw: Vec<u8>, device: &Device) -> Result<Tensor> {
 pub fn load_image_from_buffer(buffer: &[u8], device: &Device) -> Result<Tensor> {
     let img = image::load_from_memory(buffer)
         .map_err(Error::wrap)?
-        .resize_to_fill(64, 64, image::imageops::FilterType::Triangle);
+        .resize_to_fill(96, 96, image::imageops::FilterType::Triangle);
     let img = img.to_rgb8();
     
     load_image64_raw(img.into_raw(), device)
@@ -44,7 +46,7 @@ fn get_labels<P: AsRef<Path>>(path: P) -> std::io::Result<Vec<String>> {
 
 #[cfg(test)]
 mod test {
-    use std::{any, path::Path};
+    use std::path::Path;
 
     use anyhow::Ok;
     use candle_nn::{ops::softmax, Module, VarBuilder};
@@ -54,7 +56,7 @@ mod test {
     #[test]
     fn it_works()->anyhow::Result<()> {
         let model_path =
-            Path::new(env!("CARGO_MANIFEST_DIR")).join("ochw_mobilenetv2.safetensors");
+            Path::new(env!("CARGO_MANIFEST_DIR")).join("ochw_mobilenetv2_fp16.safetensors");
         
         let vb = unsafe {
             VarBuilder::from_mmaped_safetensors(

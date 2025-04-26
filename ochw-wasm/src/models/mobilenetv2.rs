@@ -166,8 +166,7 @@ pub struct Features {
 impl Features {
     fn new(vb: VarBuilder) -> Result<Self> {
         let mut c_in = 32;
-        // 需要把 features[0][0] 的 stride 改为 2=>1,
-        let cbr1 = Conv2dNormActivation::new(vb.pp(0), 3, c_in, 3, 1, 1)?;
+        let cbr1 = Conv2dNormActivation::new(vb.pp(0), 3, c_in, 3, 2, 1)?;
         let mut layer_id = 1;
         let mut invs = seq(0);
         for &(er, c_out, n, stride) in INVERTED_RESIDUAL_SETTINGS.iter() {

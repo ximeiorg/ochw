@@ -26,32 +26,37 @@ class HandwritingTrainer(pl.LightningModule):
         return self.model(x)
 
     def configure_optimizers(self):
-        optimizer = torch.optim.SGD(self.model.parameters(),lr=1e-2,weight_decay=1e-4,momentum=0.9)
-        # optimizer = torch.optim.AdamW(
-        #     self.model.parameters(), lr=1e-3, weight_decay=1e-4)
-        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-            optimizer, T_max=100)
-        return [optimizer], [scheduler]
+        # optimizer = torch.optim.SGD(self.model.parameters(),lr=1e-2,weight_decay=1e-4,momentum=0.9)
+        optimizer = torch.optim.AdamW(
+            self.model.parameters(), lr=1e-3, weight_decay=1e-4)
+        # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+        #     optimizer, T_max=100)
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', patience=3)
+        # return [optimizer], [scheduler]
+        return {
+        "optimizer": optimizer,
+        "lr_scheduler": {"scheduler": scheduler, "monitor": "val_loss"},
+    }
 
     def common_transforms_compose(self,mode='train'):
         if mode == 'train':
             return transforms.Compose([
                 lambda img: resize_to_sqr(img),
-                transforms.Resize(64),
-                transforms.ColorJitter(brightness=0.2, contrast=0.2),  # 颜色扰动
+                transforms.Resize((96,96)),
+                transforms.Lambda(lambda img: img.point(lambda x: 0 if x < 200 else 255)),  # 阈值设为200
                 transforms.RandomGrayscale(p=0.1),  # 随机灰度化模拟不同墨色
                 transforms.RandomRotation(15),
+                transforms.RandomPerspective(distortion_scale=0.2, p=0.1),  # 模拟书写倾斜
+                transforms.RandomApply([transforms.GaussianBlur(3)], p=0.1),  # 轻微模糊抗噪
                 transforms.ToTensor(),
-                transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[
-                                     0.229, 0.224, 0.225])
+                transforms.Normalize(mean=[0.95], std=[0.2])
             ])
         else:
             return transforms.Compose([
                 lambda img: resize_to_sqr(img),
-                transforms.Resize(64),
+                transforms.Resize((96,96)),
                 transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406], [
-                                     0.229, 0.224, 0.225])
+                transforms.Normalize(mean=[0.95], std=[0.2])
             ])
 
     def train_dataloader(self):

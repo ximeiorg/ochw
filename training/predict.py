@@ -20,17 +20,16 @@ def get_labels():
 if __name__ == "__main__":
 
     model = HandwritingTrainer.load_from_checkpoint(
-        "./logs/mobilenetv2/version_0/checkpoint-epoch=14-val_loss=0.221.ckpt", model="mobilenetv2")
+        "./logs/mobilenetv2/version_3/checkpoint-epoch=12-val_loss=0.206", model="mobilenetv2")
     model.eval()
     model = model.to("cuda")
-    img = Image.open("../testdata/qi.png")
+    img = Image.open("../testdata/yi.jpeg")
     img = img.convert("RGB")
-    img = img.resize((64, 64))
+    img = img.resize((96, 96))
     trans = transforms.Compose([
-        transforms.Resize((64, 64)),
+        transforms.Resize((96, 96)),
         transforms.ToTensor(),
-        transforms.Normalize([0.485, 0.456, 0.406], [
-            0.229, 0.224, 0.225])
+        transforms.Normalize(mean=[0.95], std=[0.2])
     ])
     img = trans(img)
     img = img.unsqueeze(0)
