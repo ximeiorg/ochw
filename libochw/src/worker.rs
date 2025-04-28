@@ -3,7 +3,7 @@ use candle_nn::{Module, VarBuilder};
 use serde::{Deserialize, Serialize};
 use std::io::{BufRead, BufReader};
 
-use crate::models::load_image_from_buffer;
+use crate::models::{load_image_from_buffer, mobilenetv2::Mobilenetv2};
 
 #[derive(Serialize, Deserialize)]
 pub struct Top5 {
@@ -13,7 +13,7 @@ pub struct Top5 {
 }
 
 pub struct Worker {
-    model: crate::models::mobilenetv2::Mobilenetv2,
+    model: Mobilenetv2,
 }
 
 impl Worker {
@@ -23,7 +23,7 @@ impl Worker {
         let dev = &Device::Cpu;
         let weights = include_bytes!("../ochw_mobilenetv2_fp16.safetensors");
         let vb = VarBuilder::from_buffered_safetensors(weights.to_vec(), DType::F32, dev)?;
-        let model = crate::models::mobilenetv2::Mobilenetv2::new(vb, 4037)?;
+        let model = Mobilenetv2::new(vb, 4037)?;
         Ok(Self { model })
     }
 

@@ -1,9 +1,7 @@
-pub mod models;
 mod utils;
-pub mod worker;
 
+use libochw::worker::Worker;
 use wasm_bindgen::prelude::*;
-use worker::Worker;
 
 #[wasm_bindgen]
 extern "C" {
