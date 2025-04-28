@@ -11,5 +11,4 @@ wheels/
 
 logs/
 /target/
-**/*.safetensors
 Cargo.lock

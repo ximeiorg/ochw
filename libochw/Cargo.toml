@@ -6,7 +6,7 @@ authors = ["kingzcheung"]
 description = "一个支持汉字手写识别的库"
 repository = "https://github.com/ximeiorg/ochw"
 license = "Apache-2.0"
-keywords = ["writing", "handwriting", "handwriting recognition", "candle","mobilenetv2"]
+keywords = ["writing", "handwriting", "candle","mobilenetv2"]
 
 [dependencies]
 candle-nn = {version = "0.9.0", optional = true}

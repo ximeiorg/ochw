@@ -54,7 +54,7 @@ mod test {
     use super::*;
 
     #[test]
-    fn it_works()->anyhow::Result<()> {
+    fn test_inference()->anyhow::Result<()> {
         let model_path =
             Path::new(env!("CARGO_MANIFEST_DIR")).join("ochw_mobilenetv2_fp16.safetensors");
         

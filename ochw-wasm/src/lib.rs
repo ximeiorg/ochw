@@ -36,7 +36,8 @@ pub struct Model {
 #[wasm_bindgen]
 impl Model {
     pub fn new() -> Result<Self, JsError> {
-        let worker = Worker::load_model()?;
+        let weights = include_bytes!("../ochw_mobilenetv2_fp16.safetensors");
+        let worker = Worker::load_model(weights)?;
         let labels = worker.get_labels()?;
         Ok(Self { worker, labels })
     }

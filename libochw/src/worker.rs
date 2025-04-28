@@ -19,9 +19,9 @@ pub struct Worker {
 impl Worker {
 
     /// 加载并初始化一个预训练的 MobileNetV2 模型。
-    pub fn load_model() -> Result<Self> {
+    pub fn load_model(weights: &[u8]) -> Result<Self> {
         let dev = &Device::Cpu;
-        let weights = include_bytes!("../ochw_mobilenetv2_fp16.safetensors");
+        // let weights = include_bytes!("../ochw_mobilenetv2_fp16.safetensors");
         let vb = VarBuilder::from_buffered_safetensors(weights.to_vec(), DType::F32, dev)?;
         let model = Mobilenetv2::new(vb, 4037)?;
         Ok(Self { model })
@@ -33,7 +33,7 @@ impl Worker {
         ///   如果过程中发生错误（如文件读取失败或解析错误），返回相应的错误信息。
         pub fn get_labels(&self) -> Result<Vec<String>> {
             // 读取标签文件内容
-            let label_text = include_str!("../../training/data/train/label.txt");
+            let label_text = include_str!("../label.txt");
             let reader = BufReader::new(label_text.as_bytes());
     
             let mut labels = Vec::new();
