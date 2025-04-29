@@ -3,20 +3,20 @@ use candle_nn::{Module, VarBuilder};
 use serde::{Deserialize, Serialize};
 use std::io::{BufRead, BufReader};
 
-use crate::models::{load_image_from_buffer, mobilenetv2::Mobilenetv2};
+use crate::{models::{load_image_from_buffer, mobilenetv2::Mobilenetv2}, utils::auto_crop_image_content};
 
 #[derive(Serialize, Deserialize)]
-pub struct Top5 {
+pub struct Topk {
     pub label: String,
     pub score: f32,
     pub class_idx:usize,
 }
 
-pub struct Worker {
+pub struct Inference {
     model: Mobilenetv2,
 }
 
-impl Worker {
+impl Inference {
 
     /// 加载并初始化一个预训练的 MobileNetV2 模型。
     pub fn load_model(weights: &[u8]) -> Result<Self> {
@@ -53,12 +53,14 @@ impl Worker {
     ///
     /// # 参数
     /// - `image`: 输入的图像数据，以 `Vec<u8>` 形式表示，通常为图像的二进制数据。
+    /// - `topk`: 选取前k个概率最高的类别，默认为5。
     ///
     /// # 返回值
     /// - `Result<Vec<Top5>>`: 返回一个包含前5个预测结果的 `Vec<Top5>`，每个 `Top5` 结构体包含类别标签、概率值和类别索引。
     ///   如果过程中出现错误，则返回 `Err`。
-    pub fn predict(&self, image: Vec<u8>) -> Result<Vec<Top5>> {
+    pub fn predict(&self, image: Vec<u8>,topk:Option<usize>) -> anyhow::Result<Vec<Topk>> {
         // 从缓冲区加载图像并将其转换为模型所需的张量格式
+        let image = auto_crop_image_content(&image)?;
         let image = load_image_from_buffer(&image, &Device::Cpu)?;
         let image = image.unsqueeze(0)?;
     
@@ -81,20 +83,21 @@ impl Worker {
     
         // 获取类别标签
         let labels = self.get_labels()?;
-    
+        
+        let topk = topk.unwrap_or(5);
         // 取概率最高的前5个预测结果
-        let top5 = predictions.iter().take(5).collect::<Vec<_>>();
+        let topk_data = predictions.iter().take(topk).collect::<Vec<_>>();
     
         // 将前5个预测结果转换为 `Top5` 结构体，并打印结果
-        let mut top5_data = Vec::with_capacity(5);
-        for (i, (class_idx, prob)) in top5.iter().enumerate() {
+        let mut top5_data = Vec::with_capacity(topk);
+        for (i, (class_idx, prob)) in topk_data.iter().enumerate() {
             println!(
                 "{}. Class {}: {:.2}%",
                 i + 1,
                 labels[*class_idx],
                 prob * 100.0
             );
-            top5_data.push(Top5 {
+            top5_data.push(Topk {
                 label: labels[*class_idx].clone(),
                 score: *prob,
                 class_idx: *class_idx,

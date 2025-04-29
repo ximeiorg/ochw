@@ -1,6 +1,6 @@
 mod utils;
 
-use libochw::worker::Worker;
+use libochw::infer::Inference;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
@@ -29,7 +29,7 @@ pub fn run() {
 
 #[wasm_bindgen]
 pub struct Model {
-    worker: Worker,
+    worker: Inference,
     labels: Vec<String>,
 }
 
@@ -37,7 +37,7 @@ pub struct Model {
 impl Model {
     pub fn new() -> Result<Self, JsError> {
         let weights = include_bytes!("../ochw_mobilenetv2_fp16.safetensors");
-        let worker = Worker::load_model(weights)?;
+        let worker = Inference::load_model(weights)?;
         let labels = worker.get_labels()?;
         Ok(Self { worker, labels })
     }
@@ -50,7 +50,10 @@ impl Model {
 
     /// 推理
     pub fn predict(&self, image: Vec<u8>) -> Result<String, JsError> {
-        let output = self.worker.predict(image)?;
+        let output = self
+            .worker
+            .predict(image, Some(10))
+            .map_err(|e| JsError::new(&e.to_string()))?;
         let json = serde_json::to_string(&output)?;
         Ok(json)
     }

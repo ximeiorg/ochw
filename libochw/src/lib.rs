@@ -1,2 +1,3 @@
 pub mod models;
-pub mod worker;
+pub mod infer;
+pub mod utils;
