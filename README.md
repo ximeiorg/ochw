@@ -20,7 +20,7 @@ wget https://huggingface.co/rkingzhong/ochw/resolve/main/ochw_mobilenetv2_fp16.s
 
 以 `知` 字图片为例子。
 
-![知](./test_data/zhi.png)
+![知](./libochw/test_data/zhi.png)
 
 ```rust
 let weights = include_bytes!("ochw_mobilenetv2_fp16.safetensors");
