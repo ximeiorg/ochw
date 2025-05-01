@@ -10,18 +10,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.4",
+    "@tailwindcss/vite": "^4.1.5",
     "konva": "^9.3.20",
-    "ochw-wasm": "file:../ochw-wasm/pkg",
+    "ochw-wasm": "file:pkg",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-konva": "^19.0.3",
-    "tailwindcss": "^4.1.4"
+    "tailwindcss": "^4.1.5"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.1",
     "@types/react": "^19.1.2",
-    "@types/react-dom": "^19.1.2",
+    "@types/react-dom": "^19.1.3",
     "@vitejs/plugin-react-swc": "^3.9.0",
     "eslint": "^9.25.1",
     "eslint-plugin-react-hooks": "^5.2.0",
@@ -29,7 +29,7 @@
     "globals": "^16.0.0",
     "typescript": "~5.7.3",
     "typescript-eslint": "^8.31.1",
-    "vite": "^6.3.3",
+    "vite": "^6.3.4",
     "vite-plugin-top-level-await": "^1.5.0",
     "vite-plugin-wasm": "^3.4.1"
   }

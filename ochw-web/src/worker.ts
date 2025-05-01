@@ -22,6 +22,10 @@ self.addEventListener("message", async (event: MessageEvent) => {
     try {
         const model = await HandingWrite.getInstance();
         const {uint8Array} = event.data;
+        if (uint8Array.length === 0){
+            self.postMessage({ status: `loaded` });
+            return;
+        }
         const res = model.predict(uint8Array);
         self.postMessage({
             status: "complete",

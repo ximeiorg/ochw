@@ -1,0 +1,4 @@
+onlyBuiltDependencies:
+  - '@swc/core'
+overrides:
+  pkg: link:../../.local/share/pnpm/global/5/node_modules/pkg

@@ -58,6 +58,10 @@ function App() {
         }
       }
     };
+    // 传一个空的 uint8Array 去触发初始化，解决写第一笔因为网络原因时卡住的问题
+    worker.postMessage({
+      uint8Array: [],
+    });
   }, []);
 
   function cleanHandle() {

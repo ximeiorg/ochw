@@ -12,3 +12,4 @@ wheels/
 logs/
 /target/
 Cargo.lock
+/pkg/
