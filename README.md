@@ -1,5 +1,9 @@
 # ochw -  手写汉字识别模型
 
+[![Latest version](https://img.shields.io/crates/v/libochw.svg)](https://crates.io/crates/libochw) [![Documentation](https://docs.rs/libochw/badge.svg)](https://docs.rs/libochw)
+
+
+
 ochw 是一个基于卷积神经网络的手写汉字识别模型，基于 CASIA-HWDB 1.0 数据集训练，可识别 3740 个汉字和小部分符号。
 
 模型基于 Pytorch 框架开发。
