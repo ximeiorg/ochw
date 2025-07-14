@@ -7,6 +7,7 @@ description = "一个支持汉字手写识别的库"
 repository = "https://github.com/ximeiorg/ochw"
 license = "Apache-2.0"
 keywords = ["writing", "handwriting", "candle","mobilenetv2"]
+categories = ["computer-vision", "multimedia::images"]
 readme = "README.md"
 
 [dependencies]
