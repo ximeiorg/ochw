@@ -4,10 +4,10 @@
 if ! command -v wasm-pack &> /dev/null
 then
   echo "wasm-pack not found, installing..."
-  cargo install wasm-pack &&　cargo install wasm-bindgen-cli
+  cargo install wasm-pack && cargo install wasm-bindgen-cli
 fi
 
-# ubuntu 下有一个bug，就是wasm－opt 有问题，需要关闭 --no-opt
+# ubuntu 下有一个bug，就是 wasm－opt 有问题，需要关闭 --no-opt
 
 RUSTUP_DIST_SERVER="https://rsproxy.cn" && \
     RUSTUP_UPDATE_ROOT="https://rsproxy.cn/rustup" && \

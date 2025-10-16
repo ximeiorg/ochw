@@ -1,4 +1,7 @@
 onlyBuiltDependencies:
   - '@swc/core'
+  - '@tailwindcss/oxide'
+  - esbuild
+
 overrides:
   pkg: link:../../.local/share/pnpm/global/5/node_modules/pkg
